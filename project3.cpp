@@ -3,9 +3,9 @@
  * project3.cpp
  * Fall 2025
  *
- * Partner 1:
- * Partner 2:
- * Date:
+ * Partner 1: Do, Khanh
+ * Partner 2: Bohrer-Purnell, Myles
+ * Date: Oct 31, 2025
  */
 
 #include "project3.hpp"
