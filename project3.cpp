@@ -88,6 +88,7 @@ vector<int> detectArbitrage(vector<double> &adjMatrix,
     for (int i = 0; i < n - 1; i++) {
         // flag to detect no more changes
         bool updated = false;
+
         for (int u = 0; u < n; u++) {
             for (int v = 0; v < n; v++) {
                 double w = adjMatrix[u * n + v];
