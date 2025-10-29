@@ -53,7 +53,25 @@ vector<double> createAdjacencyMatrix(vector<double> &rates, vector<string> &curr
 }
 
 /*
- * detectArbitrage
+ * detectArbitrage: Detect 
+ *
+ * Tasks description:
+ *     1. Perform the |V| - 1 iterations of Bellman-Ford with tol 
+ *     2. Perform the extra iteration and track changes in the distance value
+ *     3. Choose a single vertex that had a change and follow its path backwards
+ *          using the previous value until you find a cycle
+ *     4. Once have this path, remove any vertices not part of the cycle, reverse the path
+ * 
+ * Notes:
+ *     Do not need to find the best arbitrage opportunity.
+ *
+ * Args:
+ *     vector<double> &adjMatrix: the 1D array representing the log exchange rates matrix
+ *     vector<string> &currencies: the vector of currency labels.
+ *     double tol: a tolerance for truncation, should not be altered.
+ * 
+ * Returns:
+ *     vector<int> cycle: a vector of vertex labels (ints corresponding to their index in adjMatrix)
  */
 vector<int> detectArbitrage(vector<double> &adjMatrix, 
                             vector<string> &currencies, 
