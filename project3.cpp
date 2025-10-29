@@ -79,12 +79,65 @@ vector<int> detectArbitrage(vector<double> &adjMatrix,
 
     // Get the number of vertices and initialize the dist and prev values.
     int n = currencies.size();
-    vector<double> distances( n, numeric_limits<double>::infinity() );
+    vector<double> distances( n, 0.0 );
     vector<int> previous( n, -1 );
 
     vector<int> cycle;
+    int changedVertex = -1;
 
-    // Run the Bellman-Ford algorithm to find negative cost cycles.
+    // Perform the |V| - 1 iterations of Bellman-Ford with tol
+    for (int i = 0; i < n - 1; i++) {
+        // flag to detect no more changes
+        bool updated = false;
+        for (int u = 0; u < n; u++) {
+            for (int v = 0; v < n; v++) {
+                double w = adjMatrix[u * n + v];
+                if (distances[u] + w < distances[v] - tol) {
+                    distances[v] = distances[u] + w;
+                    previous[v] = u;
+                    updated = true;
+                }
+            }
+        }
+
+        if (!updated) break;
+    }
+
+    // Perform the extra iteration and track changes in the distance value
+    for (int u = 0; u < n; u++) {
+        for (int v = 0; v < n; v++) {
+            double w = adjMatrix[u * n + v];
+            if (distances[u] + w < distances[v] - tol) {
+                previous[v] = u;
+                changedVertex = v;
+                break;
+            }
+        }
+
+        if (changedVertex != -1) break;
+    }
+
+    // No change happened, no cycle exists
+    if (changedVertex == -1) return cycle;
+
+    // Choose a single vertex that had a change and follow its path backwards
+    for (int i = 0; i < n; i++) {
+        changedVertex = previous[changedVertex];
+    }
+
+    // Construct the cycle
+    int curr = changedVertex;
+    // Use do-while to process at least once - the starting vertex
+    do {
+        cycle.push_back(curr);
+        curr = previous[curr];
+    } while (curr != changedVertex && curr != -1);
+
+    // Complete the closed cycle
+    cycle.push_back(changedVertex);
+
+    // We trace backwards so now need to reverse
+    reverse(cycle.begin(), cycle.end());
 
     return cycle;
 }
